@@ -1,1 +1,16 @@
+# dependencies
+node_modules/
+
+# environment variables - sabse important, kabhi commit mat karna
 .env
+.env.local
+
+# agar Multer local uploads use kar raha hai
+uploads/
+
+# logs
+npm-debug.log
+*.log
+
+# OS files
+.DS_Store
