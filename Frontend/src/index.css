@@ -1,0 +1,537 @@
+/* ============================================================
+   FONTS + RESET
+   Space Grotesk sirf headings ke liye - halka sa distinct look,
+   body pe system-ui hi rakha hai taaki load heavy na ho
+============================================================ */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+/* ============================================================
+   COLOR TOKENS
+   Ek jagah se sab jagah color control - accent ab green family
+   me hi hai (blue hover hata diya), baaki tumhara original palette
+============================================================ */
+:root {
+  --accent: #25eb8b;
+  --accent-dark: #1cb068; /* hover/active ke liye darker shade of same green */
+  --accent-soft: #e7fbf2; /* halka tint - backgrounds/badges ke liye */
+  --ink: #111827;
+  --ink-soft: #6b7280;
+  --paper: #f4f6f8;
+  --border: #e5e7eb;
+}
+
+body {
+  background: var(--paper);
+}
+
+/* ============================================================
+   NAVBAR
+   Sticky top bar - dono pages me switch karne ke liye,
+   URL type karne ki need nahi
+============================================================ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 30px;
+}
+
+.navbar-logo {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+}
+
+.navbar-logo span {
+  color: var(--accent-dark);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 6px;
+  background: #f0f2f5;
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: 8px 18px;
+  border-radius: 999px;
+  transition: 0.2s ease;
+}
+
+.navbar-links a:hover {
+  color: var(--ink);
+}
+
+/* react-router NavLink ye class khud add karta hai jab route active ho */
+.navbar-links a.active {
+  background: var(--ink);
+  color: #fff;
+}
+
+@media (max-width: 500px) {
+  .navbar {
+    padding: 12px 18px;
+  }
+  .navbar-links a {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================================
+   CREATE POST PAGE
+============================================================ */
+
+.create-post-section {
+  min-height: calc(100vh - 65px); /* navbar height minus kiya */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  /* halka sa dotted texture - flat background se bacha */
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.create-post-card {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+}
+
+.create-post-header {
+  margin-bottom: 25px;
+}
+
+.create-post-header h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.create-post-header p {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.create-post-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Image Upload */
+
+.image-upload {
+  width: 100%;
+}
+
+.image-upload input {
+  display: none;
+}
+
+.image-upload label {
+  width: 100%;
+  min-height: 110px;
+  padding: 20px;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  position: relative; /* overlay ko position karne ke liye zaroori */
+  overflow: hidden;
+  gap: 15px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.image-preview img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Hover pe hi dikhega - baaki time hidden rehta hai */
+.change-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  opacity: 0;
+  transition: 0.2s ease;
+}
+
+.image-upload label:hover .change-overlay {
+  opacity: 1;
+}
+
+/* ============================================================
+   STATUS BANNER (success / error)
+============================================================ */
+
+.status-banner {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  animation: slideIn 0.25s ease;
+}
+
+.status-banner.success {
+  background: var(--accent-soft);
+  color: #0f7a45;
+  border: 1px solid #a7f3d0;
+}
+
+.status-banner.error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.image-upload label:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-soft);
+}
+
+.upload-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+}
+
+.upload-title {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.upload-subtitle {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* Caption */
+
+.caption-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.caption-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.caption-field textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  outline: none;
+  font-family: inherit;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.caption-field textarea:focus {
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 0 3px rgba(37, 235, 139, 0.15);
+}
+
+/* Button - blue hover hata ke same green family ka darker shade */
+
+.create-post-card button {
+  width: 100%;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #06341f; /* dark text green bg pe zyada readable lagta hai white se */
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.create-post-card button:hover {
+  background: var(--accent-dark);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.create-post-card button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 500px) {
+  .create-post-card {
+    padding: 22px;
+  }
+  .create-post-header h2 {
+    font-size: 24px;
+  }
+}
+
+/* ============================================================
+   FEED PAGE
+============================================================ */
+
+.feed-section {
+  min-height: calc(100vh - 65px);
+  width: 100%;
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 22px 22px;
+  padding: 50px 30px;
+}
+
+.feed-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header - ab center me, max-width diya taaki paragraph poori width
+   pe stretch na ho aur balanced dikhe */
+.feed-header {
+  margin-bottom: 40px;
+  text-align: center;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feed-header h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.feed-header p {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.posts-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.post-card {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* IMAGE - yahi tha uneven height ka fix.
+   Pehle height auto tha (image ke actual size pe depend karta tha),
+   ab fixed aspect-ratio + object-fit: cover se sab cards same height
+   ke honge, chahe original image ka size kuch bhi ho */
+.post-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.post-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-image {
+  transform: scale(1.04);
+}
+
+.post-content {
+  padding: 16px 18px 18px;
+}
+
+.post-content p {
+  margin: 0 0 12px 0;
+  color: #1f2937;
+  font-size: 16px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* Delete button - pehle unstyled tha (browser default),
+   ab red-tint subtle style diya, aggressive nahi lagega */
+.delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+/* EMPTY STATE */
+
+.empty-feed {
+  width: 100%;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 70px 20px;
+}
+
+.empty-icon {
+  font-size: 42px;
+  margin-bottom: 15px;
+}
+
+.empty-feed h2 {
+  font-size: 21px;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.empty-feed p {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+/* TABLET */
+@media (max-width: 900px) {
+  .posts-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .feed-container {
+    max-width: 800px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .feed-section {
+    padding: 30px 15px;
+  }
+  .feed-header {
+    margin-bottom: 25px;
+  }
+  .feed-header h1 {
+    font-size: 28px;
+  }
+  .feed-header p {
+    font-size: 14px;
+  }
+  .posts-wrapper {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .post-card {
+    border-radius: 15px;
+  }
+  .post-content {
+    padding: 15px 16px 17px;
+  }
+  .post-content p {
+    font-size: 15px;
+  }
+}
