@@ -28,8 +28,7 @@ const CreatePost = () => {
     const formData = new FormData(e.target);
 
     try {
-      await axios.post("http://localhost:3000/create-post", formData);
-
+      await axios.post(`${import.meta.env.VITE_API_URL}/create-post`, formData);
       // success - message dikhao, form + preview reset karo
       setStatus({ type: "success", message: "Apki Photo mere pass aa gayi... 😁❤" });
       formRef.current.reset();
@@ -55,7 +54,7 @@ const CreatePost = () => {
         {/* Success / error banner - status null hone pe kuch render nahi hoga */}
         {status && (
           <div className={`status-banner ${status.type}`}>
-            {status.type === "Success" ? "✅" : "⚠️"} {status.message}
+            {status.type === "success" ? "✅" : "⚠️"} {status.message}
           </div>
         )}
 

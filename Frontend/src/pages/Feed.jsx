@@ -4,30 +4,28 @@ import axios from "axios";
 const Feed = () => {
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/posts")
-      .then((res) => {
-        setPosts(res.data.posts);
-      })
-      .catch((error) => {
-        console.log("Error fetching posts:", error);
-      });
-  }, []);
+    useEffect(() => {
+      axios
+        .get(`${import.meta.env.VITE_API_URL}/posts`)
+        .then((res) => {
+          setPosts(res.data.posts);
+        })
+        .catch((error) => {
+          console.log("Error fetching posts:", error);
+        });
+    }, []);
 
+    const handleDelete = async (id) => {
+      try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/posts/${id}`);
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3000/posts/${id}`);
-
-      setPosts((prevPosts) =>
-        prevPosts.filter((post) => post._id !== id)
-      );
-
-    } catch (error) {
-      console.log("Error deleting post:", error);
-    }
-  };
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post._id !== id)
+        );
+      } catch (error) {
+        console.log("Error deleting post:", error);
+      }
+    };
 
   return (
     <section className="feed-section">
