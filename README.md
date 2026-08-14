@@ -52,5 +52,4 @@ Database — hosted on MongoDB Atlas
 This project was built as a learning exercise while practicing the MERN stack.
 Image storage currently uses local disk via Multer in development — for production, consider using a cloud storage service (e.g. Cloudinary) since hosting platforms like Render don't persist local files across restarts.
 👤 Author
-
-Ankush Kumar
+  Ankush
